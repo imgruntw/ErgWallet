@@ -1,0 +1,9 @@
+{
+    "Simulator Target Bundle": "de.localhost.erg.ErgWallet",
+    "aps": {
+        "alert": {
+            "title": "Test notification title",
+            "body": "Test notification body"
+        }
+    }
+}

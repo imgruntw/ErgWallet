@@ -5,6 +5,8 @@ struct ContentView: View {
     @State private var wallet: String = "Loading..."
     @State private var seed: String = "Loading..."
 
+    let notificationCenter = UNUserNotificationCenter.current()
+
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -32,8 +34,25 @@ struct ContentView: View {
             Button("get seed") {
                 getSeed()
             }.buttonStyle(.bordered)
+
+            Button("connect phoenix") {
+                connect()
+            }.buttonStyle(.borderedProminent)
+        }
+        .onAppear {
+            Task {
+                await authorizeNotifications()
+            }
         }
         .padding()
+    }
+
+    func authorizeNotifications() async {
+        do {
+            try await notificationCenter.requestAuthorization(options: [.alert, .badge, .sound])
+        } catch {
+            print("Request authorization error")
+        }
     }
 
     func fetchBalance() {
@@ -69,6 +88,10 @@ struct ContentView: View {
         } catch {
             print("Error loading from keychain: \(error)")
         }
+    }
+
+    func connect() {
+        SocketChat.shared.connect()
     }
 }
 
